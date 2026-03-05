@@ -1,0 +1,14 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+appsettings.Development.json
+
+# Node
+orderflow-ui/node_modules/
+orderflow-ui/dist/
+
+# Docker
+.env
