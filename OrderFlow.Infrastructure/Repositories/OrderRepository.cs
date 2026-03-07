@@ -8,11 +8,7 @@ namespace OrderFlow.Infrastructure.Repositories;
 public class OrderRepository : IOrderRepository
 {
     private readonly OrderFlowDbContext _context;
-
-    public OrderRepository(OrderFlowDbContext context)
-    {
-        _context = context;
-    }
+    public OrderRepository(OrderFlowDbContext context) => _context = context;
 
     public async Task<Order?> GetByIdAsync(Guid id)
         => await _context.Orders
@@ -36,4 +32,11 @@ public class OrderRepository : IOrderRepository
         _context.Orders.Update(order);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<Order>> GetByUserIdAsync(Guid userId)
+        => await _context.Orders
+            .Include(o => o.Items)
+            .Where(o => o.UserId == userId)
+            .OrderByDescending(o => o.CreatedAt)
+            .ToListAsync();
 }

@@ -24,13 +24,13 @@ export default function OrderCard({ order, isSelected, onClick }) {
     <button
       onClick={onClick}
       className={`w-full text-left px-4 py-3 transition-colors ${
-        isSelected ? 'bg-gray-800/80' : 'hover:bg-gray-900/70'
+        isSelected ? 'bg-orange-50' : 'hover:bg-slate-50'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm text-white truncate">{order.customerEmail || 'Email yok'}</p>
-          <p className="text-xs text-gray-500 mt-1">{date}</p>
+          <p className="text-sm text-slate-900 truncate">{order.customerEmail || 'Email yok'}</p>
+          <p className="text-xs text-slate-500 mt-1">{date}</p>
         </div>
         <span className={`text-xs px-2 py-1 rounded-full border whitespace-nowrap ${statusClass}`}>
           {label}
@@ -38,8 +38,8 @@ export default function OrderCard({ order, isSelected, onClick }) {
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        <p className="text-xs text-gray-500 font-mono truncate">{order.id || '-'}</p>
-        <p className="text-sm font-semibold text-violet-400">{total.toLocaleString('tr-TR')} ₺</p>
+        <p className="text-xs text-slate-500 font-mono truncate">{order.id || '-'}</p>
+        <p className="text-sm font-semibold text-orange-600">{total.toLocaleString('tr-TR')} ₺</p>
       </div>
     </button>
   );

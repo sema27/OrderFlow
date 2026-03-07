@@ -9,6 +9,7 @@ public class Order
     public DateTime? UpdatedAt { get; private set; }
 
     private readonly List<OrderItem> _items = new();
+    public Guid? UserId { get; private set; }
     public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly();
 
     public decimal TotalAmount => _items.Sum(i => i.UnitPrice * i.Quantity);
@@ -16,11 +17,10 @@ public class Order
     // EF Core için
     protected Order() { }
 
-    public static Order Create(string customerEmail, List<OrderItem> items)
+    public static Order Create(string customerEmail, List<OrderItem> items, Guid? userId = null)
     {
         if (string.IsNullOrWhiteSpace(customerEmail))
             throw new ArgumentException("Customer email boş olamaz.");
-
         if (items == null || items.Count == 0)
             throw new ArgumentException("Sipariş en az bir ürün içermelidir.");
 
@@ -29,7 +29,8 @@ public class Order
             Id = Guid.NewGuid(),
             CustomerEmail = customerEmail,
             Status = OrderStatus.Pending,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UserId = userId
         };
 
         order._items.AddRange(items);

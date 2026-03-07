@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Application.Orders.Commands;
 using OrderFlow.Application.Orders.Queries;
+using System.Security.Claims;
 
 namespace OrderFlow.API.Controllers;
 
@@ -10,22 +12,34 @@ namespace OrderFlow.API.Controllers;
 public class OrdersController : ControllerBase
 {
     private readonly IMediator _mediator;
+    public OrdersController(IMediator mediator) => _mediator = mediator;
 
-    public OrdersController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
-    /// <summary>Tüm siparişleri listeler</summary>
-    [HttpGet]
+    [HttpGet("all")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll()
     {
-        var query = new GetAllOrdersQuery();
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(new GetAllOrdersQuery());
         return Ok(result);
     }
 
-    /// <summary>ID'ye göre sipariş getirir</summary>
+    [HttpGet("my")]
+    [Authorize]
+    public async Task<IActionResult> GetMyOrders()
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await _mediator.Send(new GetMyOrdersQuery(userId));
+        return Ok(result);
+    }
+
+    [HttpPost("checkout")]
+    [Authorize]
+    public async Task<IActionResult> Checkout()
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await _mediator.Send(new CheckoutCommand(userId));
+        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -33,7 +47,6 @@ public class OrdersController : ControllerBase
         return result is null ? NotFound() : Ok(result);
     }
 
-    /// <summary>Yeni sipariş oluşturur</summary>
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateOrderCommand command)
     {
@@ -41,19 +54,27 @@ public class OrdersController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
-    /// <summary>Siparişi onayla</summary>
     [HttpPatch("{id:guid}/confirm")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Confirm(Guid id)
     {
         await _mediator.Send(new ConfirmOrderCommand(id));
         return NoContent();
     }
 
-    /// <summary>Siparişi iptal et</summary>
     [HttpPatch("{id:guid}/cancel")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Cancel(Guid id)
     {
         await _mediator.Send(new CancelOrderCommand(id));
+        return NoContent();
+    }
+
+    [HttpPatch("{id:guid}/ship")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Ship(Guid id)
+    {
+        await _mediator.Send(new ShipOrderCommand(id));
         return NoContent();
     }
 }

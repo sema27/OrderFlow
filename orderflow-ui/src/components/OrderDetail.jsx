@@ -34,9 +34,9 @@ export default function OrderDetail({ order, onRefresh }) {
       {/* Başlık */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-white">{order.customerEmail}</h2>
-          <p className="text-gray-500 text-sm mt-1">{date}</p>
-          <p className="text-gray-600 text-xs mt-1 font-mono">{order.id}</p>
+          <h2 className="text-xl font-bold text-slate-900">{order.customerEmail}</h2>
+          <p className="text-slate-500 text-sm mt-1">{date}</p>
+          <p className="text-slate-500 text-xs mt-1 font-mono">{order.id}</p>
         </div>
         <span className={`text-sm px-3 py-1.5 rounded-full border ${status.color}`}>
           {status.label}
@@ -44,26 +44,26 @@ export default function OrderDetail({ order, onRefresh }) {
       </div>
 
       {/* Ürünler */}
-      <div className="bg-gray-900 rounded-xl border border-gray-800 mb-6">
-        <div className="px-4 py-3 border-b border-gray-800">
-          <h3 className="text-sm font-medium text-gray-400">Ürünler</h3>
+      <div className="card-panel mb-6 overflow-hidden">
+        <div className="px-4 py-3 border-b border-slate-200">
+          <h3 className="text-sm font-medium text-slate-600">Ürünler</h3>
         </div>
-        <div className="divide-y divide-gray-800">
+        <div className="divide-y divide-slate-200">
           {order.items.map((item, i) => (
             <div key={i} className="px-4 py-3 flex items-center justify-between">
               <div>
-                <p className="text-sm text-white">{item.productName}</p>
-                <p className="text-xs text-gray-500">{item.quantity} adet × {item.unitPrice.toLocaleString('tr-TR')} ₺</p>
+                <p className="text-sm text-slate-900">{item.productName}</p>
+                <p className="text-xs text-slate-500">{item.quantity} adet × {item.unitPrice.toLocaleString('tr-TR')} ₺</p>
               </div>
-              <p className="text-sm font-medium text-violet-400">
+              <p className="text-sm font-medium text-orange-600">
                 {(item.quantity * item.unitPrice).toLocaleString('tr-TR')} ₺
               </p>
             </div>
           ))}
         </div>
-        <div className="px-4 py-3 border-t border-gray-800 flex justify-between">
-          <span className="text-sm font-medium text-gray-400">Toplam</span>
-          <span className="text-lg font-bold text-white">{order.totalAmount.toLocaleString('tr-TR')} ₺</span>
+        <div className="px-4 py-3 border-t border-slate-200 flex justify-between">
+          <span className="text-sm font-medium text-slate-600">Toplam</span>
+          <span className="text-lg font-bold text-slate-900">{order.totalAmount.toLocaleString('tr-TR')} ₺</span>
         </div>
       </div>
 
