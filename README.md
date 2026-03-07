@@ -9,6 +9,8 @@
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker)
 ![CI](https://github.com/sema27/OrderFlow/actions/workflows/ci.yml/badge.svg)
 
+<img width="1919" height="940" alt="Ekran görüntüsü 2026-03-08 004901" src="https://github.com/user-attachments/assets/94a8e2d7-2e22-4d9e-a5e0-73053f9fd9e3" />
+
 ---
 
 ## 🏗️ Architecture
